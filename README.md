@@ -9,7 +9,7 @@ See more at this [report](https://www.notion.so/Cryptocurrency-Pairs-Trading-via
 ## Implementation
 Our backtesting framework is [Jesse Trade](https://jesse.trade/). The implementation of our strategy can be found in `strategies/AutoPairsTrading`.
 ## Results
-##### Naitve Cointegration-based Pairs Selection
+##### Naive Cointegration-based Pairs Selection
 ![Untitled](https://raw.githubusercontent.com/jinczing/crypto-pairs-trader/master/naive.png)
 Sharpe Ratio: 0.47 Annualized Return: 8%
 ##### Clustering-based Pairs Selection
