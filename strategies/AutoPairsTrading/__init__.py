@@ -14,7 +14,7 @@ from sklearn.manifold import TSNE
 from sklearn import linear_model
 import plotly.express as px
 from matplotlib import pyplot as plt
-from sklearn.cluster import AgglomerativeClustering
+from sklearn.cluster import AgglomerativeClustering, DBSCAN
 import scipy.cluster.hierarchy as sch
 from sklearn.decomposition import PCA
 import statsmodels.api as sm
@@ -86,16 +86,17 @@ class AutoPairsTrading(Strategy):
 
         clusters = 6
         model = AgglomerativeClustering(n_clusters=clusters, affinity='euclidean', linkage='complete')
+        # model =  DBSCAN(eps=3, min_samples=2)
         model.fit(sample_pca)
         labels = model.labels_
-        labels = np.zeros_like(labels) # all in the same class
-        # print(labels)
+        # labels = np.zeros_like(labels) # all in the same class
+        print(labels)
         label_counter = Counter(labels)
 
         adfs = []
         pairs = []
         for k, v in label_counter.items():
-            if v<2:
+            if k==-1 or v<2:
                 continue
             symbols = sample.index[labels==k]
             for symbol1, symbol2, in itertools.combinations(symbols, 2):
@@ -212,7 +213,7 @@ class AutoPairsTrading(Strategy):
         else:
             self.shared_vars[self.pair]['time'] = self.time
 
-        self.shared_vars[self.pair]['balance'] = self.balance
+        self.shared_vars[self.pair]['balance'] = self.available_margin
         # get data
         a = self.get_candles(self.exchange, self.pair.split('_')[0]+'-USDT', self.freq)
         b = self.get_candles(self.exchange, self.pair.split('_')[1]+'-USDT', self.freq)
@@ -279,9 +280,9 @@ class AutoPairsTrading(Strategy):
         # if self.symbol in self.pairs.values():
         #     hedge_ratio = self.shared_vars[self.pair]['mean'][0]
         balance = self.shared_vars[self.pair]['balance']
-        qty = hedge_ratio * balance/10
-        if qty > self.balance:
-            qty = self.balance
+        qty = hedge_ratio * balance/6
+        if qty > self.available_margin:
+            qty = self.available_margin
         qty /= self.price
         self.buy = qty, self.price
 
@@ -309,9 +310,9 @@ class AutoPairsTrading(Strategy):
         # if self.symbol in self.pairs.values():
         #     hedge_ratio = self.shared_vars[self.pair]['mean'][0]
         balance = self.shared_vars[self.pair]['balance']
-        qty = hedge_ratio * balance/10
-        if qty > self.balance:
-            qty = self.balance
+        qty = hedge_ratio * balance/6
+        if qty > self.available_margin:
+            qty = self.available_margin
         qty /= self.price
         self.sell = qty, self.price
 

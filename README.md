@@ -1,22 +1,17 @@
-# Jesse Project Template
+# Cryptocurrency Pairs Trading via Unsupervised Learning
 
-This is template from which you can create your own Jesse project. 
-
-## Usage
-Assuming that you already have installed the environment dependencies, you can run the following command to create your project:
-
-```sh
-# you can change "my-project" to any name you want
-git clone https://github.com/jesse-ai/project-template.git my-project
-# to create a .env file of yours
-cp .env.example .env
-```
-
-Then while in the project run:
-
-```sh
-cd docker
-docker-compose up
-```
-
-That's it! Now open [localhost:9000](http://localhost:9000) in your browser to see the dashboard. 
+## Methodology
+In this project, we propose an unsupervised learning based approach for pairs selection in cryptocurrency perpetual futures market. <br/> <br/>
+We first use dimension reduction and clustering algorithm to bundle assets in to each group.
+Then, we use ADF test to select top cointegrated pairs from the same group. <br/> <br/>
+The result shows that our strategy is superior to pure cointegration testing strategy in terms of PnL (Profit and Loss) and Sharpe ratio. <br/> <br/>
+See more at this [report](https://www.notion.so/Cryptocurrency-Pairs-Trading-via-Unsupervised-Learning-140a1a27de774f19847eba8ee200ffde).
+## Implementation
+Our backtesting framework is [Jesse Trade](https://jesse.trade/). The implementation of our strategy can be found in `strategies/AutoPairsTrading`.
+## Results
+##### Naitve Cointegration-based Pairs Selection
+![Untitled](https://raw.githubusercontent.com/jinczing/crypto-pairs-trader/master/naive.png)
+Sharpe Ratio: 0.47 Annualized Return: 8%
+##### Clustering-based Pairs Selection
+![Untitled](https://raw.githubusercontent.com/jinczing/crypto-pairs-trader/master/clustering.png)
+Sharpe Ratio: 1.89 Annualized Return: 50.44%
